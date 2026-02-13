@@ -3,11 +3,11 @@ FROM nginx:1.27-alpine
 # Remove default config
 RUN rm /etc/nginx/conf.d/default.conf
 
-# Copy our template
+# Copy template
 COPY nginx.conf /etc/nginx/templates/default.conf.template
 
-# Nginx will auto-substitute env vars from the template
-# using envsubst on files in /etc/nginx/templates/
+# Only substitute OUR variables, not nginx's $host/$remote_addr/etc
+ENV NGINX_ENVSUBST_FILTER='^(API_HOST|API_PORT|WEB_HOST|WEB_PORT)$'
 
 EXPOSE 8080
 
